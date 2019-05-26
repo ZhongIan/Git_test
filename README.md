@@ -9,20 +9,57 @@
 
 # 目錄
 
-<!-- TOC -->autoauto- [參考](#參考)auto- [目錄](#目錄)auto- [創建](#創建)auto    - [Git 設定資料](#git-設定資料)auto    - [first 首先](#first-首先)auto        - [git init](#git-init)auto        - [git clone](#git-clone)auto        - [git fork](#git-fork)auto- [查看](#查看)auto    - [查看記錄](#查看記錄)auto- [修改](#修改)auto    - [暫存文件 git add](#暫存文件-git-add)auto    - [提交文件 git commit](#提交文件-git-commit)auto    - [git checkout -- file](#git-checkout----file)auto    - [reset](#reset)auto- [git push 提交至遠端](#git-push-提交至遠端)auto- [刪除](#刪除)auto    - [確定要從版本庫中刪除](#確定要從版本庫中刪除)auto    - [作業時刪錯](#作業時刪錯)auto- [分支 branch](#分支-branch)auto    - [遠端分支](#遠端分支)auto- [合併](#合併)auto    - [git merge](#git-merge)auto- [git pull](#git-pull)auto    - [git pull --rebase](#git-pull---rebase)auto- [git rebase](#git-rebase)auto    - [git rebase interactive](#git-rebase-interactive)auto        - [reword](#reword)auto        - [edit](#edit)auto        - [未嘗試](#未嘗試)auto- [git cherry pick](#git-cherry-pick)auto    - [衝突](#衝突)auto- [git revert](#git-revert)auto- [解決衝突](#解決衝突)auto- [git stash 暫存](#git-stash-暫存)auto- [git show](#git-show)auto- [git grep](#git-grep)auto- [git 其他設定](#git-其他設定)auto- [push 多個遠端](#push-多個遠端)autoauto<!-- /TOC -->
+- [參考](#參考)
+- [目錄](#目錄)
+- [創建](#創建)
+    - [Git 設定資料](#git-設定資料)
+    - [first 首先](#first-首先)
+        - [git init](#git-init)
+        - [git clone](#git-clone)
+        - [git fork](#git-fork)
+- [查看](#查看)
+    - [查看記錄](#查看記錄)
+- [修改](#修改)
+    - [暫存文件 git add](#暫存文件-git-add)
+    - [提交文件 git commit](#提交文件-git-commit)
+    - [git checkout -- file](#git-checkout----file)
+        - [reset](#reset)
+- [git push 提交至遠端](#git-push-提交至遠端)
+- [刪除](#刪除)    - [確定要從版本庫中刪除](#確定要從版本庫中刪除)
+    - [作業時刪錯](#作業時刪錯)
+- [分支 branch](#分支-branch)
+    - [遠端分支](#遠端分支)- [合併](#合併)
+    - [git merge](#git-merge)
+- [git pull](#git-pull)
+    - [git pull --rebase](#git-pull---rebase)
+- [git rebase](#git-rebase)
+    - [git rebase interactive](#git-rebase-interactive)
+        - [reword](#reword)
+        - [edit](#edit)
+        - [未嘗試](#未嘗試)
+- [git cherry pick](#git-cherry-pick)
+    - [衝突](#衝突)
+    - [git revert](#git-revert)
+- [解決衝突](#解決衝突)
+- [git stash 暫存](#git-stash-暫存)
+- [git show](#git-show)
+- [git grep](#git-grep)
+- [git 其他設定](#git-其他設定)
+- [push 多個遠端](#push-多個遠端)
+
 
 # 創建
 
 ## Git 設定資料
 
-git config --global user.name
-git config --global user.email
+    git config --global user.name
+    git config --global user.email
 
 ## first 首先
 
 ### git init
 
-git init <directory>
+    git init <directory>
 
 ### git clone 
 
