@@ -1,5 +1,15 @@
 
+# 參考
 
+[莫凡 git](https://morvanzhou.github.io/tutorials/others/git/4-3-rebase/)
+
+[Git-Tutorials](https://github.com/twtrubiks/Git-Tutorials)
+
+參考網路資源，仿作並記錄
+
+# 目錄
+
+<!-- TOC -->autoauto- [參考](#參考)auto- [目錄](#目錄)auto- [創建](#創建)auto    - [Git 設定資料](#git-設定資料)auto    - [first 首先](#first-首先)auto        - [git init](#git-init)auto        - [git clone](#git-clone)auto        - [git fork](#git-fork)auto- [查看](#查看)auto    - [查看記錄](#查看記錄)auto- [修改](#修改)auto    - [暫存文件 git add](#暫存文件-git-add)auto    - [提交文件 git commit](#提交文件-git-commit)auto    - [git checkout -- file](#git-checkout----file)auto    - [reset](#reset)auto- [git push 提交至遠端](#git-push-提交至遠端)auto- [刪除](#刪除)auto    - [確定要從版本庫中刪除](#確定要從版本庫中刪除)auto    - [作業時刪錯](#作業時刪錯)auto- [分支 branch](#分支-branch)auto    - [遠端分支](#遠端分支)auto- [合併](#合併)auto    - [git merge](#git-merge)auto- [git pull](#git-pull)auto    - [git pull --rebase](#git-pull---rebase)auto- [git rebase](#git-rebase)auto    - [git rebase interactive](#git-rebase-interactive)auto        - [reword](#reword)auto        - [edit](#edit)auto        - [未嘗試](#未嘗試)auto- [git cherry pick](#git-cherry-pick)auto    - [衝突](#衝突)auto- [git revert](#git-revert)auto- [解決衝突](#解決衝突)auto- [git stash 暫存](#git-stash-暫存)auto- [git show](#git-show)auto- [git grep](#git-grep)auto- [git 其他設定](#git-其他設定)auto- [push 多個遠端](#push-多個遠端)autoauto<!-- /TOC -->
 
 # 創建
 
@@ -31,7 +41,7 @@ history commit )，這時候就很適合使用 --depth
 
 但是會有一個問題，當嘗試切換 branch git checkout stable/2.2.x
 
-( 你會發現你無法切換 remote branch 😱
+( 你會發現你無法切換 remote branch 
 
 原因是因為使用 --depth 相當於是 --single-branch，
 
@@ -67,13 +77,17 @@ or
 
 # 查看
 
-## 查看目前的 repository ( repo 容器 )
+查看目前的 repository ( repo 容器 )
 
     git status 
 
 如果想要查看這次還沒 add (unstaged) 的修改部分 和上個已經 commit 的文件有何不同, 使用
 
     git diff
+
+也可以看 commits 之間的差異
+
+    git diff commit1_id commit2_id
 
 如果你已經 add 了這次修改, 文件變成了 “可提交狀態” (staged), 我們可以在 diff 中添加參數 --cached 來查看修改
 
@@ -298,6 +312,17 @@ git branch 也可以修改名稱，而且 commit id 是不會改變的
 
 可以先簡單想成 git pull = git fetch + git merge
 
+## git pull --rebase
+
+原因是因為當我們使用 git pull --rebase 造成衝突時，修好衝突的內容之後，git add xxxx，接著我們會
+
+直接執行 git rebase --continue。
+
+假設今天你執行了 git pull --rebase 之後，發現很難受 ，想要取消，
+
+直接執行 git rebase --abort 即可回到之前的狀態。
+
+
 # git rebase
 
 先確定在分支上( checkout )，在rebase
@@ -308,6 +333,16 @@ git branch 也可以修改名稱，而且 commit id 是不會改變的
 與merge不同在於，v2不是新增一個commit，而是v2及master歷史commit合併(變成同一條線)
 
 ## git rebase interactive
+
+Commands:
+
+    p, pick = use commit
+    r, reword = use commit, but edit the commit message
+    e, edit = use commit, but stop for amending
+    s, squash = use commit, but meld into previous commit
+    f, fixup = like "squash", but discard this commit's log message
+    x, exec = run command (the rest of the line) using shell
+    d, drop = remove commit
 
 ### reword
 
@@ -362,13 +397,224 @@ after-this-commit 簡單說，就是要選當下的 commit id 的上一個
 
     e 424fd22 Second commit
 
+### 未嘗試
+
+* s, squash = use commit, but meld into previous commit
+* f, fixup = like "squash", but discard this commit's log message
+
+簡單一點，單純想要忽略某一個 commit message 時，使用 fixup，
+
+想要合併 commit 並修改 commit message 時，使用 squash。
+
+* x, exec = run command (the rest of the line) using shell
+
+測試用
+
+    pick 424fd22 Second commit
+    x echo "test"
+    pick 241c439 first commit
+    x error
+
+根本沒有 error 這個指令，
+
+當如果執行到 shell 有錯誤時，他會停下來，讓你修正
+
+修正完了之後，再執行
+
+    git rebase --continue
+
+* d, drop = remove commit
+
+移除這個 commit ( 包含 commit 內容 )
+
+
 [git rebase -i Doc](https://git-scm.com/docs/git-rebase#_interactive_mode)
 
-# 參考
+# git cherry pick
 
-[莫凡 git](https://morvanzhou.github.io/tutorials/others/git/4-3-rebase/)
+只要某個分支的某個commit
 
-[Git-Tutorials](https://github.com/twtrubiks/Git-Tutorials)
+    git cherry-pick 14dee93
+
+如果你想要一次撿很多的分支過來也是可以，直接使用空白隔開即可
+
+    git cherry-pick 14dee93 xxxxxx xxxxxx xxxxxx xxxxx
+
+## 衝突
+
+使用 git status 看一下狀態
+
+修正後，執行 git add 
+
+執行 git cherry-pick --continue，就時候會跳出一個編輯視窗
+
+輸入完 commit message 之後，再輸入 :wq
+
+# git revert
+
+假設我 commit history 為 
+
+    A1 -> A2 -> A3 -> A4 -> A5 -> A6
+
+我現在想要回 A4 這個 commit , 這時候我就可以使用 git revert
+
+    git revert A4
+
+假如你再看現在的 commit history , 他會長的像這樣
+
+    A1 -> A2 -> A3 -> A4 -> A5 -> A6 -> A4_revert
+
+使用 git revert 的好處，就是可以保留 commit history , 萬一你又後悔了，
+
+也可以在 revert 回去
+
+# 解決衝突
+
+git status 可以告訴我們衝突的文件
+
+修改衝突 conflicts，然後再加個 commit
+
+git add Hello.py
+git commit -m "conflict fixed"
+
+放棄合併
+
+    git merge --abort
+
+或退回reset
+
+    git reset --hard HEAD
+
+# git stash 暫存
+
+現在突然有一個bug必須馬上 ( 立刻 ) 處理，但是，啊我手上的事情還沒做完阿~~~~ 這時候，可以利用以下指令
+
+    git stash
+
+暫存現在的程式
+
+假如你想要更清楚自己這次的 stash 原因是什麼，或是這是正在開發什麼功能 可以使用以下指令
+
+    git stash save -u "我是註解"
+
+可以使用下列的指令來觀看 stash 裡面的東西
+
+    git stash lis
+
+取回暫存，也會刪除 stash
+
+    git stash pop
+
+假設今天你有很多的 stash，你可以指定，如下
+
+    git stash pop stash@{0}
+
+如果你希望使用 stash 取回之後，不希望刪除 stash ，可以使用下列的指令
+
+    git stash apply
+
+如果你只是想要刪除暫存，可以使用下列的指令
+
+    git stash clear
+
+如果你想丟棄指定的 stash，可以使用
+
+    git stash drop stash@{0}
+
+# git show
+
+一般來說，只用他來看這個 commit 修改了哪些東西
+
+# git grep
+
+簡單說，就是可以幫你找出符合的 pattern，舉個例子，我希望找出內容
+
+有包含 hello 這個 pattern 的檔案，這時候，就可以執行以下指令
+
+    git grep "hello"
+
+a.py:print("hello world")
+b.py:print("hello")
+
+# git 其他設定
+
+Git 工作區的根目錄下新建一個特殊的 .gitignore 文件 ，
+
+然後把要忽略的文件 ( 檔案 ) 名稱輸入進去， Git 就會自動忽略這些文件。
+
+當然不需要自己從頭寫 .gitignore 文件， GitHub 已經幫我們準備了一些文件
+
+[.gitignore](https://github.com/github/gitignore)
+
+.gitignore 檔案格式範例
+
+    # 註解
+    *.bak
+    *.log
+
+簡寫，讓 Git 以後打 git st = git status，常用指令
+
+    git config --global alias.st status
+
+    git config --global alias.br branch
+
+    git config --global alias.ck checkout
+
+    git config --global alias.cm commit
+
+    git config --global alias.lg "log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold bl
+
+設定檔文件位置
+
+通常會在你的使用者底下，例如我這台電腦使用者為 HJ，設定檔文件就會在 C:\Users\HJ 底下，
+
+他是一個 隱藏文件.gitconfig
+
+不知道大家有沒有注意到 --global 這個參數，他代表的意思是全域的，如果說你今天是執行
+
+    git config alias.stu status
+
+代表只有在該目錄底下時才會有作用。
+
+那這個有什麼用呢？ 試想一種情境，假設你在特定的資料夾底下，想要使用特定的信箱去 push，而其他的資料夾，
+
+則一樣使用公司的信箱，這時候，就非常適合使用這種方法完成。
+
+更多資訊細節可使用以下命令查看
+
+    git config -l
+
+# push 多個遠端
+
+這裡用 Bitbucket 當作範例
+
+先使用下方指令查看
+
+    git remote -v
+
+接著我們使用下列指令新增一個 origin 的遠端
+
+    git remote set-url --add origin <url>
+
+重新命名 remote，語法如下，
+
+    git remote rename <old> <new>
+
+刪除 remove
+
+    git remote remove <name>
+
+新增 add
+
+    git remote add origin <url>
+
+如果我們想修改 origin 的 url，可以使用
+
+    git remote set-url origin
+
+
+[git remote Doc](https://git-scm.com/docs/git-remote)
+
 
 
 
