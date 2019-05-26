@@ -1,3 +1,11 @@
 git branch v1
 test by merge 
 pull test
+change
+test by merge 
+pull test
+git pull
+
+git merge v2
+
+v2合併至master
